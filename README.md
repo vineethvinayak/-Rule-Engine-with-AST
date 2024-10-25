@@ -3,7 +3,7 @@
 The Rule Engine with AST project is a web-based application that allows users to create, combine, modify, and evaluate rules using Abstract Syntax Trees (ASTs). It provides a flexible and powerful way to define and process complex logical rules.
 
 
-# Features
+# Features:
 
 - Create Rules: Users can create new rules by providing a rule name and rule string
 - Combine Rules: Users can combine two existing rules using logical operators (AND, OR).
@@ -14,17 +14,16 @@ The Rule Engine with AST project is a web-based application that allows users to
 
 
 
-# Tech Stack
+# Tech Stack:
 
 **Client:** HTML5, CSS, JavaScript 
 
 **Server:** Python v3.12, Flask 2.0.1, SQLite
 
-# Directory Structure
+# Directory Structure:
+![Screenshot 2024-10-25 091753](https://github.com/user-attachments/assets/f267ab60-5733-4080-bc66-aa80dcb4b405)
 
-
-
-# Installation
+# Installation:
 
 
 - Clone the repository
