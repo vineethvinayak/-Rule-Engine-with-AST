@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine with AST</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Rule Engine with AST</h1>
+
+    <div class="card">
+        <h2>Create Rule</h2>
+        <input type="text" id="rule-name" placeholder="Rule Name">
+        <textarea id="rule-input" placeholder="Enter rule"></textarea>
+        <button onclick="createRule()">Create Rule</button>
+        <div id="create-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>Combine Rules</h2>
+        <textarea id="rule1-input" placeholder="Rule 1"></textarea>
+        <select id="combine-operator">
+            <option value="AND">AND</option>
+            <option value="OR">OR</option>
+        </select>
+        <textarea id="rule2-input" placeholder="Rule 2"></textarea>
+        <button onclick="combineRules()">Combine Rules</button>
+        <div id="combine-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>Modify Rule</h2>
+        <input type="text" id="modify-rule-name" placeholder="Rule Name">
+        <textarea id="modified-rule-input" placeholder="Enter modified rule"></textarea>
+        <button onclick="modifyRule()">Modify Rule</button>
+        <div id="modify-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>Evaluate Rule</h2>
+        <select id="evaluate-rule-name"></select>
+        <textarea id="evaluate-input-data" placeholder="Enter JSON data"></textarea>
+        <button onclick="evaluateRule()">Evaluate Rule</button>
+        <div id="evaluate-result"></div>
+    </div>
+
+    <footer>
+        <p>&copy; Vineeth Vinayak MH</p>
+    </footer>
+
+    <script>
+        function createRule() {
+            const ruleName = document.getElementById('rule-name').value;
+            const ruleString = document.getElementById('rule-input').value;
+            
+            fetch('/create_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rule_name=${encodeURIComponent(ruleName)}&rule=${encodeURIComponent(ruleString)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('create-result').innerHTML = `Rule created successfully. AST: ${data.ast}`;
+                    updateRuleList();
+                } else {
+                    document.getElementById('create-result').innerHTML = `Error: ${data.error}`;
+                }
+            });
+        }
+
+        function combineRules() {
+            const rule1 = document.getElementById('rule1-input').value;
+            const rule2 = document.getElementById('rule2-input').value;
+            const operator = document.getElementById('combine-operator').value;
+            
+            fetch('/combine_rules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rule1=${encodeURIComponent(rule1)}&rule2=${encodeURIComponent(rule2)}&operator=${encodeURIComponent(operator)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('combine-result').innerHTML = `Rules combined successfully. AST: ${data.ast}`;
+                } else {
+                    document.getElementById('combine-result').innerHTML = `Error: ${data.error}`;
+                }
+            });
+        }
+
+        function modifyRule() {
+            const ruleName = document.getElementById('modify-rule-name').value;
+            const modifiedRule = document.getElementById('modified-rule-input').value;
+            
+            fetch('/modify_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rule_name=${encodeURIComponent(ruleName)}&modified_rule=${encodeURIComponent(modifiedRule)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('modify-result').innerHTML = `Rule modified successfully. AST: ${data.ast}`;
+                } else {
+                    document.getElementById('modify-result').innerHTML = `Error: ${data.error}`;
+                }
+            });
+        }
+
+        function evaluateRule() {
+            const ruleName = document.getElementById('evaluate-rule-name').value;
+            const inputDataText = document.getElementById('evaluate-input-data').value;
+        
+            let inputData;
+            try {
+                inputData = JSON.parse(inputDataText);
+            } catch (error) {
+                document.getElementById('evaluate-result').textContent = `Error: Invalid JSON input - ${error.message}`;
+                return;
+            }
+        
+            fetch('/evaluate_rule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rule_name: ruleName,
+                    input_data: inputData
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('evaluate-result').textContent = `Error: ${data.error}`;
+                } else {
+                    document.getElementById('evaluate-result').textContent = `Result: ${JSON.stringify(data.result)}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('evaluate-result').textContent = `Error: ${error.message}`;
+            });
+        }
+
+        function updateRuleList() {
+            fetch('/get_rules')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('evaluate-rule-name');
+                select.innerHTML = '';
+                data.rules.forEach(rule => {
+                    const option = document.createElement('option');
+                    option.value = rule;
+                    option.textContent = rule;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        // Initialize the rule list
+        updateRuleList();
+    </script>
+</body>
+</html>
