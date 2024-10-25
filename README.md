@@ -58,9 +58,9 @@ The Rule Engine with AST project is a web-based application that allows users to
 ```
 - Open a web browser and navigate to http://127.0.0.1:5000/ to use the application
     
-# Rules and Input
+# Rules and Input:
 ## Rules:
-### - General Conditions for Rule String Acceptance: 
+### General Conditions for Rule String Acceptance: 
 i. The rule string must follow a specific syntax using supported Logical Operators   such as: AND, OR and Supported Comparison Symbols such as: Equal to: =, Greater than: >, Less than: <, Greater than or equal to: >= and Less than or equal to: <=.
 
 ii.	Parentheses must be balanced.
@@ -71,7 +71,7 @@ iv. Operators (AND, OR) should be used correctly.
 
 v. Comparison operators (>, <, >=, <=, =) should be used with appropriate operands.
 
-### - Rule Naming Convention:
+### Rule Naming Convention:
 
 i. Valid: Alphanumeric characters, underscores, no spaces (e.g., "age_check", "income_rule_2023")
 
