@@ -82,14 +82,14 @@ iii. Each new rule created should have a unique name.
 ## Input(with examples):
 
 #### - Create Rule: The Create Rule feature allows users to define new rules in the system.
-#### Valid Input example:
+Valid Input example:
 
 rule name: rule88
 
 rule string:((age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing')) AND (salary > 50000 OR experience > 5)
 
 #### - Combine Rules: - This feature allows users to combine two existing rules using logical operators
-#### Valid Input example:
+Valid Input example:
 
 rule 1: ((age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing'))
 
@@ -98,7 +98,7 @@ Operator: AND
 rule 2: (salary > 50000 OR experience > 5)
 
 #### - Evaluate Rule : - This feature allows users to test rules against specific input data.
-#### Valid Input example:
+Valid Input example:
 
 rule name: rule88
 
@@ -107,7 +107,7 @@ JSON Data for true: {"age": 35, "department": "Sales", "salary": 60000, "experie
 JSON Data for false: {"age": 25, "department": "Sales", "salary": 60000, "experience": 3} 
 
 #### - Modify Rule (BONUS): - This feature enables users to update existing rules.
-#### Valid Input example:
+Valid Input example:
 
 rule name: rule88
 
